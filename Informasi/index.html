@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Persamaan Diferensial dan Integrasi Rasi Bintang</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3e5f5;
+            color: #4a148c;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #8e24aa;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-size: 1.1rem;
+            color: #6a0dad;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #8e24aa;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #4a148c;
+            outline: none;
+            box-shadow: 0 0 10px rgba(74, 20, 140, 0.3);
+        }
+        button {
+            background-color: #8e24aa;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #6a0dad;
+            transform: scale(1.05);
+        }
+        #results {
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 2px solid #8e24aa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1.1rem;
+            color: #4a148c;
+        }
+    </style>
+    <script>
+        // Fungsi untuk menghitung perubahan posisi bintang dengan persamaan diferensial
+        function computeStarDistance(initialDistance, velocity, time) {
+            // Persamaan gerak: x(t) = x0 + v * t
+            let newDistance = initialDistance + velocity * time;
+            return newDistance;
+        }
+
+        // Fungsi untuk menghitung integrasi untuk lintasan bintang
+        function integrateStarMotion(initialDistance, velocity, timeStep, totalTime) {
+            let distance = initialDistance;
+            let time = 0;
+            while (time < totalTime) {
+                distance += velocity * timeStep;
+                time += timeStep;
+            }
+            return distance;
+        }
+
+        function displayResults() {
+            // Ambil input dari pengguna
+            let initialDistance = parseFloat(document.getElementById("initialDistance").value);
+            let velocity = parseFloat(document.getElementById("velocity").value);
+            let time = parseFloat(document.getElementById("time").value);
+            let timeStep = parseFloat(document.getElementById("timeStep").value);
+            let totalTime = parseFloat(document.getElementById("totalTime").value);
+
+            // Validasi input
+            if (isNaN(initialDistance) || isNaN(velocity) || isNaN(time) || isNaN(timeStep) || isNaN(totalTime)) {
+                document.getElementById("results").innerHTML = "<p style='color: red;'>Harap masukkan nilai yang valid untuk semua input.</p>";
+                return;
+            }
+
+            // Hitung perubahan posisi bintang
+            let newDistance = computeStarDistance(initialDistance, velocity, time);
+            let integratedDistance = integrateStarMotion(initialDistance, velocity, timeStep, totalTime);
+
+            // Tampilkan hasil
+            document.getElementById("results").innerHTML = `
+                <p><strong>Hasil Perhitungan:</strong></p>
+                <p>Jarak bintang setelah ${time} detik: <strong>${newDistance.toFixed(2)} m</strong></p>
+                <p>Total jarak yang diintegrasi selama ${totalTime} detik: <strong>${integratedDistance.toFixed(2)} m</strong></p>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <h1>Kalkulator Persamaan Diferensial dan Integrasi Rasi Bintang</h1>
+    <p>Masukkan data di bawah ini untuk menghitung perubahan posisi bintang:</p>
+
+    <label for="initialDistance">Jarak awal (m):</label>
+    <input type="number" id="initialDistance" placeholder="Contoh: 1e11" required><br>
+
+    <label for="velocity">Kecepatan bintang (m/s):</label>
+    <input type="number" id="velocity" placeholder="Contoh: 300000" required><br>
+
+    <label for="time">Waktu (s):</label>
+    <input type="number" id="time" placeholder="Contoh: 3600" required><br>
+
+    <label for="timeStep">Langkah waktu (s):</label>
+    <input type="number" id="timeStep" placeholder="Contoh: 1" required><br>
+
+    <label for="totalTime">Total waktu (s):</label>
+    <input type="number" id="totalTime" placeholder="Contoh: 3600" required><br>
+
+    <button onclick="displayResults()">Hitung</button>
+
+    <div id="results"></div>
+</body>
+</html>
